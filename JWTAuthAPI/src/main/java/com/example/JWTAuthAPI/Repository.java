@@ -1,4 +1,4 @@
 package com.example.JWTAuthAPI;
 
-public class service {
+public class Repository {
 }

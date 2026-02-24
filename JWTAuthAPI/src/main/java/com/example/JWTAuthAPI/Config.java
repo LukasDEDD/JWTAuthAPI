@@ -1,4 +1,4 @@
 package com.example.JWTAuthAPI;
 
-public class security {
+public class Config {
 }

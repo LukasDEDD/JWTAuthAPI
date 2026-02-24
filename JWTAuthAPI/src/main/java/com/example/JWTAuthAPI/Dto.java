@@ -1,4 +1,4 @@
 package com.example.JWTAuthAPI;
 
-public class dto {
+public class Dto {
 }
