@@ -4,13 +4,14 @@ import jakarta.persistence.*;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
 
-public class User {
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -28,10 +29,10 @@ public class User {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    public User() {
+    public UserEntity() {
     }
 
-    public User(LocalDateTime createdAt, Long id, String firstname, String lastname, String email, String password, Role role, LocalDateTime updatedAt) {
+    public UserEntity(LocalDateTime createdAt, Long id, String firstname, String lastname, String email, String password, Role role, LocalDateTime updatedAt) {
         this.createdAt = createdAt;
         this.id = id;
         this.firstname = firstname;
@@ -104,6 +105,37 @@ public class User {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+    @Override
+    public java.util.Collection<? extends org.springframework.security.core.GrantedAuthority> getAuthorities() {
+        // Převede tvoji Role (enum) na formát, kterému rozumí Spring Security
+        return java.util.List.of(new org.springframework.security.core.authority.SimpleGrantedAuthority(role.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        // Tady říkáš, že "username" pro přihlášení je tvůj "email"
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; // Účet nikdy nevyprší
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; // Účet není blokován
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; // Heslo nikdy nevyprší
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true; // Účet je aktivní
     }
 }
 
