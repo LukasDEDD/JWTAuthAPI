@@ -22,12 +22,15 @@ public class UserService implements UserDetailsService {
 
   public UserEntity findByEmail(String email) {
     return userRepository.findByEmail(email)
-      .orElseThrow(() -> new RuntimeException("User not found"));
+      .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
   }
+
+
 
   @Override
   public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    return (UserDetails) findByEmail(email);
+    return findByEmail(email);
   }
 }
+
 

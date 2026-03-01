@@ -108,34 +108,34 @@ public class UserEntity implements UserDetails {
     }
     @Override
     public java.util.Collection<? extends org.springframework.security.core.GrantedAuthority> getAuthorities() {
-        // Převede tvoji Role (enum) na formát, kterému rozumí Spring Security
+
         return java.util.List.of(new org.springframework.security.core.authority.SimpleGrantedAuthority(role.name()));
     }
 
     @Override
     public String getUsername() {
-        // Tady říkáš, že "username" pro přihlášení je tvůj "email"
+
         return email;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true; // Účet nikdy nevyprší
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // Účet není blokován
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // Heslo nikdy nevyprší
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return true; // Účet je aktivní
+        return true;
     }
 }
 
