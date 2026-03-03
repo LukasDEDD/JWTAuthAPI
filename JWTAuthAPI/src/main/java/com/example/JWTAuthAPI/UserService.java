@@ -13,10 +13,12 @@ public class UserService implements UserDetailsService {
   private final UserRepository userRepository;
 
   public UserService(UserRepository userRepository) {
+
     this.userRepository = userRepository;
   }
 
   public UserEntity save(UserEntity user) {
+
     return userRepository.save(user);
   }
 
