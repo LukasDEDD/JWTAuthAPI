@@ -3,11 +3,15 @@ package com.example.JWTAuthAPI;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
+@ActiveProfiles("test")
 class AuthServiceTest {
 
   @Autowired
@@ -16,8 +20,14 @@ class AuthServiceTest {
   @Autowired
   private UserService userService;
 
+  @Autowired
+  private PasswordEncoder passwordEncoder;
+
   @Test
+
+
   void testRegister() {
+
     RegisterRequest request = new RegisterRequest();
     request.setFirstname("Lukas");
     request.setLastname("Simek");
@@ -27,6 +37,7 @@ class AuthServiceTest {
 
     AuthResponse response = authService.register(request);
 
+    assertNotNull(response);
     assertNotNull(response.getToken());
   }
 
@@ -37,17 +48,18 @@ class AuthServiceTest {
     user.setFirstname("Test");
     user.setLastname("User");
     user.setEmail("login@test.com");
-    user.setPassword("$2a$10$abcdefghijklmnopqrstuv"); // fake hash
+    user.setPassword(passwordEncoder.encode("heslo123"));
     user.setRole(Role.USER);
+
     userService.save(user);
 
     LoginRequest request = new LoginRequest();
     request.setEmail("login@test.com");
     request.setPassword("heslo123");
 
-    assertThrows(RuntimeException.class, () -> {
-      authService.login(request);
-    });
+    AuthResponse response = authService.login(request);
+
+    assertNotNull(response);
+    assertNotNull(response.getToken());
   }
 }
-
